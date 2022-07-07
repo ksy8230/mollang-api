@@ -5,22 +5,18 @@ from accountapp.serializers import AccountSerializer
 from django.contrib.auth import authenticate, login
 from .models import User
 from django.shortcuts import render
-# Create your views here.
-# AccountList: 유저 생성, 유저 수정, 유저 삭제, 유저 조회
-# AccountLists: 유저들 조회
-# Login : 로그인
 
 def hello_world(request):
     return Response('Hello world!')
 
-class AccountList(generics.CreateAPIView):
+# 회원가입
+class CreateAccount(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = AccountSerializer
 
 
-
+# 로그인 
 class Login(APIView):
-    # 로그인
     permission_classes = (permissions.AllowAny,)
     def post(self, request):
         data = request.data
@@ -33,4 +29,11 @@ class Login(APIView):
         if user is not None:
             login(request, user)
             return Response({'detail': "Success"})
+
+# 유저들 조회
+class AccountList(APIView):
+    def get(self, request):
+        users = User.objects.all()
+        serializer = AccountSerializer(users, many=True)
+        return Response(serializer.data)
 
