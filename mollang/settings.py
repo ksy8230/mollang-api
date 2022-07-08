@@ -110,6 +110,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'mollang.wsgi.application'
 
+AUTH_USER_MODEL = 'accountapp.User'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases

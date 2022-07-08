@@ -10,10 +10,14 @@ def hello_world(request):
     return Response('Hello world!')
 
 # 회원가입
-class CreateAccount(generics.CreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = AccountSerializer
-
+class CreateAccount(APIView):
+    permission_classes = (permissions.AllowAny,)
+    def post(self, request):
+        serializer = AccountSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # 로그인 
 class Login(APIView):
@@ -28,7 +32,9 @@ class Login(APIView):
 
         if user is not None:
             login(request, user)
-            return Response({'detail': "Success"})
+            return Response({'message': "User logged in successully", 'data': user.id})
+        else:
+            return Response({'message': "User does not exits"}, status=400)
 
 # 유저들 조회
 class AccountList(APIView):
