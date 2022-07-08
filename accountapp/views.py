@@ -10,7 +10,7 @@ def hello_world(request):
     return Response('Hello world!')
 
 # 회원가입
-class CreateAccount(APIView):
+class Account(APIView):
     permission_classes = (permissions.AllowAny,)
     def post(self, request):
         serializer = AccountSerializer(data=request.data)
@@ -18,6 +18,7 @@ class CreateAccount(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 # 로그인 
 class Login(APIView):
@@ -43,3 +44,10 @@ class AccountList(APIView):
         serializer = AccountSerializer(users, many=True)
         return Response(serializer.data)
 
+# 나 조회
+class WhoIam(APIView):
+    # authentication_classes = (authenticate.SessionAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+    def get(self, request, format=None):
+        serializers = AccountSerializer(request.user)
+        return Response(serializers.data)
