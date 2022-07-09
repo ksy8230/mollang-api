@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework import status, generics, permissions
 from rest_framework.response import Response
 from accountapp.serializers import AccountSerializer
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from .models import User
 from django.shortcuts import render
 
@@ -37,6 +37,12 @@ class Login(APIView):
         else:
             return Response({'message': "User does not exits"}, status=400)
 
+# 로그아웃
+class Logout(APIView):
+    def post(self, request):
+        logout(request)
+        return Response()
+
 # 유저들 조회
 class AccountList(APIView):
     def get(self, request):
@@ -47,7 +53,8 @@ class AccountList(APIView):
 # 나 조회
 class WhoIam(APIView):
     # authentication_classes = (authenticate.SessionAuthentication,)
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
     def get(self, request, format=None):
         serializers = AccountSerializer(request.user)
         return Response(serializers.data)
