@@ -39,6 +39,7 @@ class Login(APIView):
 
 # 로그아웃
 class Logout(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
     def post(self, request):
         logout(request)
         return Response()
@@ -56,5 +57,6 @@ class WhoIam(APIView):
     # permission_classes = (permissions.IsAuthenticated,)
     permission_classes = (permissions.AllowAny,)
     def get(self, request, format=None):
+        print(request.user)
         serializers = AccountSerializer(request.user)
         return Response(serializers.data)
