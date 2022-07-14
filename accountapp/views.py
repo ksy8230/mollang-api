@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework import status, generics, permissions
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication
 from rest_framework.response import Response
-from accountapp.serializers import AccountSerializer
+from accountapp.serializers import AccountSerializer, AccountDetailSerializer
 from django.contrib.auth import authenticate, login, logout
 from .models import User
 from django.shortcuts import render
@@ -54,16 +54,23 @@ class AccountList(APIView):
 
 # 나 조회
 class WhoIam(APIView):
-<<<<<<< HEAD
-    authentication_classes = (SessionAuthentication, BasicAuthentication,)
+    authentication_classes = (SessionAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
     # permission_classes = (permissions.AllowAny,)
-=======
-    # authentication_classes = (authenticate.SessionAuthentication,)
-    # permission_classes = (permissions.IsAuthenticated,)
-    permission_classes = (permissions.AllowAny,)
->>>>>>> e130b88b59a7870c62837c6e982d4d1cab003b14
     def get(self, request, format=None):
         print(request.user)
         serializers = AccountSerializer(request.user)
         return Response(serializers.data)
+
+# 사용자 수정
+class UpdateAccount(APIView):
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+    def patch(self, request, format=None):
+        print(request.data)
+        user = self.request.user
+        serializer = AccountDetailSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
