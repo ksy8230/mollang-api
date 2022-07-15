@@ -54,15 +54,9 @@ class AccountList(APIView):
 
 # 나 조회
 class WhoIam(APIView):
-<<<<<<< HEAD
     authentication_classes = (SessionAuthentication, BasicAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
     # permission_classes = (permissions.AllowAny,)
-=======
-    # authentication_classes = (authenticate.SessionAuthentication,)
-    # permission_classes = (permissions.IsAuthenticated,)
-    permission_classes = (permissions.AllowAny,)
->>>>>>> e130b88b59a7870c62837c6e982d4d1cab003b14
     def get(self, request, format=None):
         print(request.user)
         serializers = AccountSerializer(request.user)
