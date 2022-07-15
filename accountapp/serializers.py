@@ -29,7 +29,9 @@ class AccountDetailSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.username = validated_data.get("username", instance.username)
-        instance.password = validated_data.get("password", instance.password)
+        password = validated_data.get("password", instance.password)
+        if not password.startswith("pbkdf2_sha256$"):
+            instance.set_password(validated_data.get("password", instance.password))
         instance.email = validated_data.get("email", instance.email)
         instance.name = validated_data.get("name", instance.name)
         instance.save()

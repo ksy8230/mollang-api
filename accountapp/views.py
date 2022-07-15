@@ -31,6 +31,7 @@ class Login(APIView):
         password = data.get('password', None)
 
         user = authenticate(username=username, password=password)
+        print(user)
 
         if user is not None:
             login(request, user)
@@ -67,7 +68,6 @@ class UpdateAccount(APIView):
     authentication_classes = (SessionAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
     def patch(self, request, format=None):
-        print(request.data)
         user = self.request.user
         serializer = AccountDetailSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
