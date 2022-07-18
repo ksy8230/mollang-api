@@ -1,5 +1,6 @@
-from django.contrib.postgres.fields import ArrayField
+# from django.contrib.postgres.fields import ArrayField
 from django.db import models
+# from django.contrib.postgres.fields import JSONField
 
 # Create your models here.
 from accountapp.models import User
@@ -7,7 +8,7 @@ from accountapp.models import User
 
 class Company(models.Model):
     name = models.CharField(max_length=100)
-    categories = ArrayField(models.IntegerField(), null=False)
+    categories = models.JSONField()
     region = models.IntegerField()
     phone = models.CharField(max_length=100) # todo 폰번호 저장 형식
     siteUrl = models.CharField(max_length=100)

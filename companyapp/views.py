@@ -13,6 +13,7 @@ class RegisterCompany(APIView):
     permission_classes = (permissions.IsAuthenticated,)
     def post(self, request):
         serializer = CompanySerializer(data=request.data)
+        # print(serializer)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
