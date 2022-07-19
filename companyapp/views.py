@@ -27,12 +27,13 @@ class UpdateCompany(APIView):
 
     def get_object(self, pk):
         company = get_object_or_404(Company, pk=pk)
+        print(company)
         return company
 
     def put(self, request, *args, **kwargs):
         pk = self.kwargs.get('pk')
         saved_company = self.get_object(pk)
-        print(saved_company)
+        # print(saved_company)
         serializer = CompanyUpdateSerializer(instance=saved_company, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()

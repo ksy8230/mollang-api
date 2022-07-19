@@ -1,12 +1,6 @@
 # from django.contrib.postgres.fields import ArrayField
 from django.db import models
-# from django.contrib.postgres.fields import JSONField
 
-# Create your models here.
-from accountapp.models import User
-# from django.contrib.auth.models import User
-# from django.conf import settings
-# User = settings.AUTH_USER_MODEL
 
 class Company(models.Model):
     id = models.AutoField(primary_key=True)
