@@ -10,12 +10,6 @@ class CompanySerializer(serializers.ModelSerializer):
         company = Company.objects.create(**validated_data)
         return company
 
-
-class CompanyUpdateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Company
-        fields = ('id', 'name', 'categories', 'region', 'phone', 'siteUrl', 'created_at', 'username')
-
     def update(self, instance, validated_data):
         instance.name = validated_data.get("name", instance.name)
         instance.categories = validated_data.get("categories", instance.categories)
@@ -23,5 +17,7 @@ class CompanyUpdateSerializer(serializers.ModelSerializer):
         instance.phone = validated_data.get("phone", instance.phone)
         instance.siteUrl = validated_data.get("siteUrl", instance.siteUrl)
         instance.save()
-
         return instance
+
+
+
