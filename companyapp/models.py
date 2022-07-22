@@ -5,7 +5,7 @@ from django.db import models
 class Company(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
-    categories = models.JSONField()
+    categories = models.JSONField(default='{}')
     region = models.IntegerField()
     phone = models.CharField(max_length=100) # todo: 폰번호 저장 형식
     siteUrl = models.CharField(max_length=100)

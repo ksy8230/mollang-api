@@ -8,6 +8,7 @@ from rest_framework.views import APIView
 from companyapp.models import Company
 from companyapp.serializers import CompanySerializer
 from rest_framework.generics import get_object_or_404
+from django.db.models import Q
 
 # 업체 등록
 class RegisterCompany(APIView):
@@ -55,8 +56,20 @@ class CompanyList(APIView):
                 name = request.GET.get("searchValue", None)
                 queryset = Company.objects.filter(name=name).order_by("-created_at", "-id")
             elif search_type == "categories":
-                categories = request.GET.get("searchValue", None)
-                queryset = Company.objects.filter(categories__icontains=categories).order_by("-created_at", "-id")
+                # categories = request.GET.get("searchValue", None)
+                categories = self.request.query_params.get('searchValue').split(',')
+                if len(categories) == 1:
+                    queryset = Company.objects.filter(categories__icontains=categories[0]).order_by("-created_at", "-id")
+                elif len(categories) == 2:
+                    queryset = Company.objects.filter(Q(categories__icontains=categories[0]) | Q(categories__icontains=categories[1])).order_by("-created_at", "-id")
+                elif len(categories) == 3:
+                    queryset = Company.objects.filter(
+                        Q(categories__icontains=categories[0]) | Q(categories__icontains=categories[1]) | Q(categories__icontains=categories[2])).order_by(
+                        "-created_at", "-id")
+                else:
+                    queryset = Company.objects.filter(categories__icontains='').order_by("-created_at", "-id")
+
+                print(queryset)
             elif search_type == "region":
                 region = request.GET.get("searchValue", None)
                 queryset = Company.objects.filter(region=region).order_by("-created_at", "-id")
@@ -67,10 +80,8 @@ class CompanyList(APIView):
                 queryset = Company.objects.order_by("-created_at", "-id")
             serializer = CompanySerializer(queryset, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
+
         except Exception as e:
             print(e)
 
 
-        # companies = Company.objects.all()
-        # serializer = CompanySerializer(companies, many=True)
-        # return Response(serializer.data)
