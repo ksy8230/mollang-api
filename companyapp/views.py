@@ -45,12 +45,11 @@ class UpdateCompany(APIView):
         saved_company.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-# 업체 리스트 조회
+# 업체 리스트 조회 (or조건)
 class CompanyList(APIView):
     permission_classes = (permissions.AllowAny,)
     def get(self, request):
         search_type = request.GET.get("searchType", None)
-
         try:
             if search_type == "name":
                 name = request.GET.get("searchValue", None)
@@ -69,7 +68,6 @@ class CompanyList(APIView):
                 else:
                     queryset = Company.objects.filter(categories__icontains='').order_by("-created_at", "-id")
 
-                print(queryset)
             elif search_type == "region":
                 region = request.GET.get("searchValue", None)
                 queryset = Company.objects.filter(region=region).order_by("-created_at", "-id")
@@ -85,3 +83,27 @@ class CompanyList(APIView):
             print(e)
 
 
+# 업체 리뷰 글쓰기
+class CompanyList_Review_Write(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    # 업체 리뷰 글쓰기 > 업체 리스트 조회 (and조건)
+    def get(self, request):
+        search_category = self.request.query_params.get('searchCategory').split(',')
+        search_region = request.GET.get("searchRegion", None)
+        if len(search_category) == 1:
+            queryset = Company.objects.filter(Q(categories__icontains=search_category[0]) & Q(region=search_region))
+        elif len(search_category) == 2:
+            queryset = Company.objects.filter(
+                Q(categories__icontains=search_category[0]) & Q(categories__icontains=search_category[1]) & Q(region=search_region))
+        elif len(search_category) == 3:
+            queryset = Company.objects.filter(
+                Q(categories__icontains=search_category[0]) & Q(categories__icontains=search_category[1]) & Q(categories__icontains=search_category[2]) & Q(region=search_region))
+        else:
+            queryset = Company.objects.filter(categories__icontains='')
+
+        serializer = CompanySerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+# 업체 리뷰 글쓰기
+# class CompanyReview(APIView):
