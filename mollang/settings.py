@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'accountapp',
     'articleapp',
     'companyapp',
+    'reviewapp',
     'rest_framework',
     'corsheaders',
     'rest_framework.authtoken',
