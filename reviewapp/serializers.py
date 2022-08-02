@@ -4,7 +4,7 @@ from reviewapp.models import Review
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
-        fields = ('id', 'categories', 'region', 'title', 'content', 'rate', 'updated_at', 'username')
+        fields = ('id', 'name', 'categories', 'region', 'title', 'content', 'rate', 'updated_at', 'username')
 
     def create(self, validated_data):
         company = Review.objects.create(**validated_data)
@@ -18,5 +18,4 @@ class ReviewSerializer(serializers.ModelSerializer):
     #     instance.siteUrl = validated_data.get("siteUrl", instance.siteUrl)
     #     instance.save()
     #     return instance
-
 #

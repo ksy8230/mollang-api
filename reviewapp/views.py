@@ -4,9 +4,10 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from reviewapp.serializers import ReviewSerializer
+from reviewapp.models import Review
 
 # 리뷰 등록 / 리뷰 수정 / 리뷰 삭제 / 리뷰 상세보기
-class Review(APIView):
+class RegisterReview(APIView):
     authentication_classes = (SessionAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
     def post(self, request):

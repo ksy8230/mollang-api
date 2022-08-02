@@ -3,6 +3,7 @@ from django.db import models
 
 class Review(models.Model):
     id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
     categories = models.JSONField(default=list)
     region = models.IntegerField()
     title = models.CharField(max_length=100)

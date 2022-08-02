@@ -1,11 +1,11 @@
 from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
-from reviewapp.views import Review, ReviewList
+from reviewapp.views import RegisterReview, ReviewList
 
 app_name = "reviewapp"
 
 urlpatterns = [
-    path('register/', Review.as_view(), name='register'),
+    path('register/', RegisterReview.as_view(), name='register'),
     path(r'list', ReviewList.as_view(), name='list'),
     # path('update/<int:pk>', UpdateCompany.as_view(), name='update'),
     # path('delete/<int:pk>', UpdateCompany.as_view(), name='update'),
