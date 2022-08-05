@@ -2,6 +2,7 @@ from rest_framework import serializers
 from companyapp.models import Company
 
 class CompanySerializer(serializers.ModelSerializer):
+    username = serializers.ReadOnlyField(source='username.name')
     class Meta:
         model = Company
         fields = ('id', 'name', 'categories', 'region', 'phone', 'siteUrl', 'created_at', 'username')
