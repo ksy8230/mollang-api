@@ -12,6 +12,11 @@ from rest_framework import viewsets
 class RegisterReview(APIView):
     authentication_classes = (SessionAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
+
+    def get_object(self, pk):
+        object = get_object_or_404(Review, pk=pk)
+        return object
+
     def post(self, request):
         serializer = ReviewSerializer(data=request.data)
         if serializer.is_valid():
@@ -19,10 +24,20 @@ class RegisterReview(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def put(self, request, *args, **kwargs):
+        pk = self.kwargs.get('pk')
+        saved_review = self.get_object(pk)
+        serializer = ReviewSerializer(instance=saved_review, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 # 리뷰 > 상세 보기
 class UpdateReview(APIView):
-    authentication_classes = (SessionAuthentication,)
-    permission_classes = (permissions.IsAuthenticated,)
+    # authentication_classes = (SessionAuthentication,)
+    # permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
 
     def get_object(self, pk):
         review = get_object_or_404(Review, pk=pk)
