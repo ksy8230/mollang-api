@@ -33,6 +33,7 @@ class RegisterReview(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 # 리뷰 > 상세 보기
 class UpdateReview(APIView):
     # authentication_classes = (SessionAuthentication,)
