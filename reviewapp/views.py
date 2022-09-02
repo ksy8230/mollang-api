@@ -8,7 +8,7 @@ from reviewapp.models import Review, Comment
 from rest_framework.generics import get_object_or_404
 from rest_framework import viewsets
 
-# 리뷰 > 등록 / TODO : 리뷰 수정 / 리뷰 삭제
+# 리뷰 > 등록 / TODO : 리뷰 삭제
 class RegisterReview(APIView):
     authentication_classes = (SessionAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
@@ -32,6 +32,12 @@ class RegisterReview(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, *args, **kwargs):
+        pk = self.kwargs.get('pk')
+        saved_review = self.get_object(pk)
+        saved_review.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 # 리뷰 > 상세 보기
