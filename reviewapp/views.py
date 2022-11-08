@@ -8,7 +8,7 @@ from reviewapp.models import Review, Comment
 from rest_framework.generics import get_object_or_404
 from rest_framework import viewsets
 
-# 리뷰 > 등록 / TODO : 리뷰 삭제
+# 리뷰 > 등록  
 class RegisterReview(APIView):
     authentication_classes = (SessionAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
@@ -18,6 +18,7 @@ class RegisterReview(APIView):
         return object
 
     def post(self, request):
+        # print(self.request.user)
         serializer = ReviewSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(username=self.request.user)
